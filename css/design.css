@@ -105,7 +105,7 @@ body {
 }
 
 .pagination li a {
-    border: 2px solid #eaeaea;
+    border: 1px solid #eaeaea;
     border-radius: 5px;
     padding: 3px 8px;
     text-decoration: none;

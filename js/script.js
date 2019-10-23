@@ -7,37 +7,65 @@ FSJS project 2 - List Filter and Pagination
 
 
 // Global variables
-
+const searchInput = document.createElement('INPUT');
+const searchButton = document.createElement('BUTTON');
+const names = document.querySelectorAll('h3');
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
-let page = 1;
-// Math.ceil rounds UP to the next integer,
-// without it, the page always starts at 'page 0'
 let pageNumber = Math.ceil(studentList.length / itemsPerPage);
 
-// This function shows only 10 students per page while hiding the rest,
-// it works on list of any size.
+// This function dynamically adds the search bar to the page.
+
+function appendSearchBar() {
+    const headerDiv = document.getElementsByClassName('page-header cf')[0];
+    const searchDiv = document.createElement('DIV');
+    searchDiv.className = 'student-search';
+    searchInput.placeholder = 'Search for students...';
+    searchButton.textContent = 'Search';
+    headerDiv.appendChild(searchDiv);
+    searchDiv.appendChild(searchInput);
+    searchDiv.appendChild(searchButton);
+}
+appendSearchBar();
+
+function searchBar(searchInput, names) {
+    console.log(searchInput);
+    console.log(names);
+    const searchResult = [];
+    for (let i = 0; i < names.length; i++) {
+        names[i].classList.remove('student-search');
+        if (searchInput.value.length !== 0 && names[i].textContent
+            .toLowerCase().includes(searchInput.value.toLowerCase())) {
+            names[i].classList.add('student-search');
+            searchResult.push(names[i]);
+        }
+    }
+}
+
+
+// This function displays only 10 students per page while hiding the rest.
 function showPage(list, page) {
     let startIndex = (page * itemsPerPage) - itemsPerPage;
     let endIndex = page * itemsPerPage;
     for (let i = 0; i < list.length; i++) {
         if (i >= startIndex && i < endIndex) {
-            list[i].style.display = 'list-item';
+            list[i].style.display = 'block';
         } else {
             list[i].style.display = 'none';
         }
     }
 }
-showPage(studentList, page);
+showPage(studentList, 1);
 
-// This function
+// This function creates 'div' 'ul' 'li' 'a' elements and append them to the page.
+// It loops over the list to create numbered links .
 
 function appendPageLinks(list) {
     const divParent = document.querySelector('.page');
     const div = document.createElement('DIV');
+    const ul = document.createElement('UL');
     div.className = 'pagination';
     divParent.appendChild(div);
-    const ul = document.createElement('UL');
     div.appendChild(ul);
     for (let i = 1; i <= pageNumber; i++) {
         const li = document.createElement('LI');
@@ -47,24 +75,22 @@ function appendPageLinks(list) {
         li.appendChild(a);
         a.textContent = i;
         a.className = 'active';
-        const allLinks = document.querySelectorAll('a');
-        for (let i = 0; i <= allLinks.length; i++)
-            a.addEventListener('click', (e) => {
-                e.target.className = 'active';
-                showPage(studentList, i);
-            });
-        a.addEventListener('mouseover', (e) => {
-            e.target.style.backgroundColor = '#0b6f91';
-            //e.target.style = "font-size: 18px";
-        });
-        a.addEventListener('mouseout', (e) => {
-            e.target.style.backgroundColor = '#4ba6c3';
-            //e.target.style = "font-size: 16px";
+        a.addEventListener('click', (e) => {
+            a.classList.remove('active');
+            e.target.className = 'active';
+            showPage(list, i);
         });
     }
-
-
 }
 appendPageLinks(studentList);
 
-// Remember to delete the comments that came with this file, and replace them with your own code comments.s
+searchButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    searchBar(searchInput, names);
+    showPage(names, 1)
+});
+
+
+searchInput.addEventListener('keyup', () => {
+    searchBar(searchInput, names);
+});
