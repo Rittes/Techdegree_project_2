@@ -36,8 +36,6 @@ function searchBar(searchInput, list) {
     const searchValue = document.querySelector('.student-searchFunction')
     const searchResult = [];
 
-
-
     for (let i = 0; i < list.length; i++) {
         list[i].classList.remove('student-search');
         if (searchValue.value.length !== 0 && list[i].textContent
@@ -46,7 +44,7 @@ function searchBar(searchInput, list) {
             searchResult.push(list[i]);
             list[i].style.display = 'block';
             showPage(searchResult, 1);
-            appendPageLinks(searchResult);
+
         } else if (searchResult.length === 0 && searchValue.value.length !== 0) {
             h2.appendChild(p);
             p.textContent = 'No results were found...';
@@ -61,7 +59,7 @@ function searchBar(searchInput, list) {
     }
 
 
-    appendPageLinks(searchResult);
+
 
 }
 
