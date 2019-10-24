@@ -49,15 +49,6 @@ function searchBar(searchInput, list) {
 
         }
     }
-    // if (searchResult.value !== list) {
-    //     console.log(searchResult)
-    //     const h2 = document.querySelector('h2');
-    //     const p = document.createElement('P');
-    //     h2.appendChild(p);
-    //     p.textContent = 'No results were found...';
-
-
-    // }
     appendPageLinks(searchResult);
 
 }
