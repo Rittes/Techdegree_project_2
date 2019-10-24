@@ -9,10 +9,10 @@ FSJS project 2 - List Filter and Pagination
 // Global variables
 const searchInput = document.createElement('INPUT');
 const searchButton = document.createElement('BUTTON');
-const names = document.querySelectorAll('h3');
+const list = document.querySelectorAll('h3');
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
-let pageNumber = Math.ceil(studentList.length / itemsPerPage);
+
 
 // This function dynamically adds the search bar to the page.
 
@@ -22,24 +22,44 @@ function appendSearchBar() {
     searchDiv.className = 'student-search';
     searchInput.placeholder = 'Search for students...';
     searchButton.textContent = 'Search';
+    searchInput.className = 'student-searchFunction'
     headerDiv.appendChild(searchDiv);
     searchDiv.appendChild(searchInput);
     searchDiv.appendChild(searchButton);
 }
 appendSearchBar();
 
-function searchBar(searchInput, names) {
-    console.log(searchInput);
-    console.log(names);
+function searchBar(searchInput, list) {
+    const searchValue = document.querySelector('.student-searchFunction')
     const searchResult = [];
-    for (let i = 0; i < names.length; i++) {
-        names[i].classList.remove('student-search');
-        if (searchInput.value.length !== 0 && names[i].textContent
-            .toLowerCase().includes(searchInput.value.toLowerCase())) {
-            names[i].classList.add('student-search');
-            searchResult.push(names[i]);
+
+    for (let i = 0; i < list.length; i++) {
+        list[i].classList.remove('student-search');
+        if (searchValue.value.length !== 0 && list[i].textContent
+            .toLowerCase().includes(searchValue.value.toLowerCase())) {
+            list[i].classList.add('student-search');
+            searchResult.push(list[i]);
+            list[i].style.display = 'block';
+            showPage(searchResult, 1);
+        } else if (searchInput.value.length === 0) {
+            showPage(studentList, 1);
+
+        } else {
+            list[i].style.display = 'none';
+
         }
     }
+    // if (searchResult.value !== list) {
+    //     console.log(searchResult)
+    //     const h2 = document.querySelector('h2');
+    //     const p = document.createElement('P');
+    //     h2.appendChild(p);
+    //     p.textContent = 'No results were found...';
+
+
+    // }
+    appendPageLinks(searchResult);
+
 }
 
 
@@ -54,11 +74,13 @@ function showPage(list, page) {
             list[i].style.display = 'none';
         }
     }
+    appendPageLinks(studentList);
 }
-showPage(studentList, 1);
+
 
 // This function creates 'div' 'ul' 'li' 'a' elements and append them to the page.
 // It loops over the list to create numbered links .
+
 
 function appendPageLinks(list) {
     const divParent = document.querySelector('.page');
@@ -67,30 +89,33 @@ function appendPageLinks(list) {
     div.className = 'pagination';
     divParent.appendChild(div);
     div.appendChild(ul);
-    for (let i = 1; i <= pageNumber; i++) {
+    for (let i = 1; i <= list.length; i++) {
         const li = document.createElement('LI');
         const a = document.createElement('A');
-        a.setAttribute('href', '#')
-        ul.appendChild(li);
-        li.appendChild(a);
-        a.textContent = i;
-        a.className = 'active';
-        a.addEventListener('click', (e) => {
-            a.classList.remove('active');
-            e.target.className = 'active';
-            showPage(list, i);
-        });
+        if (i <= Math.ceil(list.length / itemsPerPage)) {
+            a.setAttribute('href', '#')
+            ul.appendChild(li);
+            li.appendChild(a);
+            a.textContent = i;
+            a.className = 'active';
+            a.addEventListener('click', (e) => {
+                a.classList.remove('active');
+                e.target.className = 'active';
+                showPage(list, i);
+            });
+        }
     }
 }
-appendPageLinks(studentList);
+
 
 searchButton.addEventListener('click', (e) => {
     e.preventDefault();
-    searchBar(searchInput, names);
-    showPage(names, 1)
+    searchBar(searchInput, studentList);
 });
 
 
 searchInput.addEventListener('keyup', () => {
-    searchBar(searchInput, names);
+    searchBar(searchInput, studentList);
 });
+
+showPage(studentList, 1);
