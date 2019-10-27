@@ -10,10 +10,16 @@ FSJS project 2 - List Filter and Pagination
 const searchInput = document.createElement('INPUT');
 const searchButton = document.createElement('BUTTON');
 const list = document.querySelectorAll('h3');
-const h2 = document.querySelector('h2');
 const p = document.createElement('P');
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
+
+function showPara(string) {
+    const h2 = document.querySelector('h2');
+
+    p.textContent = string;
+    return h2.appendChild(p);
+}
 
 
 // This function dynamically adds the search bar to the page.
@@ -24,42 +30,49 @@ function appendSearchBar() {
     searchDiv.className = 'student-search';
     searchInput.placeholder = 'Search for students...';
     searchButton.textContent = 'Search';
-    searchInput.className = 'student-searchFunction'
+    searchInput.className = 'student-searchFunction';
     headerDiv.appendChild(searchDiv);
     searchDiv.appendChild(searchInput);
     searchDiv.appendChild(searchButton);
 }
 appendSearchBar();
 
+function removePagination() {
+    const ul = document.getElementsByTagName('ul')[1];
+    return ul.parentNode.removeChild(ul);
+}
 
-function searchBar(searchInput, list) {
-    const searchValue = document.querySelector('.student-searchFunction')
+function searchBar(list) {
+    const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
-
     for (let i = 0; i < list.length; i++) {
         list[i].classList.remove('student-search');
+
         if (searchValue.value.length !== 0 && list[i].textContent
             .toLowerCase().includes(searchValue.value.toLowerCase())) {
             list[i].classList.add('student-search');
             searchResult.push(list[i]);
             list[i].style.display = 'block';
-            showPage(searchResult, 1);
-
-        } else if (searchResult.length === 0 && searchValue.value.length !== 0) {
-            h2.appendChild(p);
-            p.textContent = 'No results were found...';
-
-        } else if (searchInput.value.length === 0) {
             showPage(studentList, 1);
+            removePagination();
+
+            appendPageLinks(searchResult);
+
+        } else if (searchResult.length < 1 && searchValue.value.length !== 0) {
+            showPara("No results were found...");
+            removePagination();
+            list[i].style.display = 'none';
+
+
+        } else if (searchValue.value.length === 0) {
+            showPage(studentList, 1);
+            showPara('');
 
         } else {
             list[i].style.display = 'none';
 
         }
     }
-
-
-
 
 }
 
@@ -75,7 +88,6 @@ function showPage(list, page) {
             list[i].style.display = 'none';
         }
     }
-    appendPageLinks(studentList);
 }
 
 
@@ -87,36 +99,46 @@ function appendPageLinks(list) {
     const divParent = document.querySelector('.page');
     const div = document.createElement('DIV');
     const ul = document.createElement('UL');
-    div.className = 'pagination';
-    divParent.appendChild(div);
-    div.appendChild(ul);
+
     for (let i = 1; i <= list.length; i++) {
         const li = document.createElement('LI');
         const a = document.createElement('A');
-        if (i <= Math.ceil(list.length / itemsPerPage)) {
-            a.setAttribute('href', '#')
+        a.setAttribute('href', '#')
+        div.className = 'pagination';
+        divParent.appendChild(div);
+        div.appendChild(ul);
+        if (i <= Math.ceil(list.length / itemsPerPage) && i <= itemsPerPage) {
             ul.appendChild(li);
             li.appendChild(a);
             a.textContent = i;
-            a.className = 'active';
-            a.addEventListener('click', (e) => {
-                a.classList.remove('active');
-                e.target.className = 'active';
-                showPage(list, i);
-            });
+            const allLinks = document.querySelectorAll('a');
+            allLinks[0].className = 'active';
+            for (let j = 0; j < allLinks.length; j++) {
+
+                a.addEventListener('click', (e) => {
+
+                    allLinks[j].classList.remove('active');
+
+                    e.target.classList.add('active');
+
+                    showPage(studentList, a.textContent);
+                });
+            }
         }
     }
+
 }
 
 
 searchButton.addEventListener('click', (e) => {
     e.preventDefault();
-    searchBar(searchInput, studentList);
+    searchBar(studentList);
 });
 
 
 searchInput.addEventListener('keyup', () => {
-    searchBar(searchInput, studentList);
+    searchBar(studentList);
 });
 
 showPage(studentList, 1);
+appendPageLinks(studentList);
