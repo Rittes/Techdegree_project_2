@@ -16,7 +16,6 @@ const itemsPerPage = 10;
 
 function showPara(string) {
     const h2 = document.querySelector('h2');
-
     p.textContent = string;
     return h2.appendChild(p);
 }
@@ -107,18 +106,15 @@ function appendPageLinks(list) {
         div.className = 'pagination';
         divParent.appendChild(div);
         div.appendChild(ul);
-        if (i <= Math.ceil(list.length / itemsPerPage) && i <= itemsPerPage) {
+        if (i <= Math.ceil(list.length / itemsPerPage)) {
             ul.appendChild(li);
             li.appendChild(a);
             a.textContent = i;
             const allLinks = document.querySelectorAll('a');
             allLinks[0].className = 'active';
-            for (let j = 0; j < allLinks.length; j++) {
-
+            for (let j = 0; j <= allLinks.length; j++) {
                 a.addEventListener('click', (e) => {
-
                     allLinks[j].classList.remove('active');
-
                     e.target.classList.add('active');
 
                     showPage(studentList, a.textContent);
