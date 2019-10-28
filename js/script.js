@@ -14,11 +14,9 @@ const p = document.createElement('P');
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
 
-function showPara(string) {
-    const h2 = document.querySelector('h2');
-    p.textContent = string;
-    return h2.appendChild(p);
-}
+
+
+
 
 
 // This function dynamically adds the search bar to the page.
@@ -37,39 +35,60 @@ function appendSearchBar() {
 appendSearchBar();
 
 function removePagination() {
+    //     const pageDiv = document.getElementsByClassName('page')[0];
+    //     const paginationDiv = pageDiv.lastElementChild;
+    //     const paginationUL = paginationDiv.firstElementChild;
+    //     paginationDiv.remove(paginationUL);
     const ul = document.getElementsByTagName('ul')[1];
-    return ul.parentNode.removeChild(ul);
+    const paretnUL = ul.parentNode;
+    paretnUL.removeChild(ul);
+
 }
+// const h2 = document.querySelector('h2');
+// p.textContent = 'No results were found...';
+// h2.appendChild(p);
 
 function searchBar(list) {
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
-    for (let i = 0; i < list.length; i++) {
-        list[i].classList.remove('student-search');
+    if (searchValue.length > 0) {
+        for (let i = 0; i < list.length; i++) {
+            list[i].classList.remove('student-search');
+            if (searchValue.value.length !== 0 && list[i].textContent
+                .toLowerCase().includes(searchValue.value.toLowerCase())) {
+                list[i].classList.add('student-search');
+                list[i].style.display = 'block';
+                searchResult.push(list[i]);
+                showPage(searchResult, 1);
 
-        if (searchValue.value.length !== 0 && list[i].textContent
-            .toLowerCase().includes(searchValue.value.toLowerCase())) {
-            list[i].classList.add('student-search');
-            searchResult.push(list[i]);
-            list[i].style.display = 'block';
-            showPage(studentList, 1);
-            removePagination();
-
+            } else {
+                list[i].style.display = 'none';
+            }
+        }
+        if (searchResult.length < 1) {
+            const ul = document.getElementsByTagName('ul')[1];
+            const paretnUL = ul.parentNode;
+            paretnUL.removeChild(ul);
             appendPageLinks(searchResult);
+            showPage(searchResult);
+        }
+        if (searchResult.length === 0) {
+            const ul = document.getElementsByTagName('ul')[1];
+            const paretnUL = ul.parentNode;
+            paretnUL.removeChild(ul);
+            const h2 = document.querySelector('h2');
+            p.textContent = 'No results were found...';
+            h2.appendChild(p);
 
-        } else if (searchResult.length < 1 && searchValue.value.length !== 0) {
-            showPara("No results were found...");
-            removePagination();
-            list[i].style.display = 'none';
-
-
-        } else if (searchValue.value.length === 0) {
-            showPage(studentList, 1);
-            showPara('');
-
-        } else {
-            list[i].style.display = 'none';
-
+        }
+    } else {
+        for (let i = 0; i < list.length; i++) {
+            list[i].style.display = 'block';
+            const ul = document.getElementsByTagName('ul')[1];
+            const paretnUL = ul.parentNode;
+            paretnUL.removeChild(ul);
+            appendPageLinks(list);
+            showPage(studentList, i);
         }
     }
 
@@ -98,33 +117,33 @@ function appendPageLinks(list) {
     const divParent = document.querySelector('.page');
     const div = document.createElement('DIV');
     const ul = document.createElement('UL');
-
-    for (let i = 1; i <= list.length; i++) {
+    ul.className = 'pagination__ul';
+    div.className = 'pagination';
+    divParent.appendChild(div);
+    div.appendChild(ul);
+    const totalPages = Math.ceil(list.length / itemsPerPage);
+    for (let i = 1; i <= totalPages; i++) {
         const li = document.createElement('LI');
         const a = document.createElement('A');
         a.setAttribute('href', '#')
-        div.className = 'pagination';
-        divParent.appendChild(div);
-        div.appendChild(ul);
-        if (i <= Math.ceil(list.length / itemsPerPage)) {
-            ul.appendChild(li);
-            li.appendChild(a);
-            a.textContent = i;
-            const allLinks = document.querySelectorAll('a');
-            allLinks[0].className = 'active';
-            for (let j = 0; j <= allLinks.length; j++) {
-                a.addEventListener('click', (e) => {
-                    allLinks[j].classList.remove('active');
-                    e.target.classList.add('active');
-
-                    showPage(studentList, a.textContent);
-                });
-            }
-        }
+        ul.appendChild(li);
+        li.appendChild(a);
+        a.textContent = i;
     }
+    const allLinks = document.querySelectorAll('a');
+    allLinks[0].className = 'active';
+    for (let j = 0; j < allLinks.length; j++) {
+        allLinks[j].addEventListener('click', (e) => {
+            let allLinksTwo = document.querySelectorAll('a');
+            showPage(list, event.target.textContent);
+            for (let k = 0; k < allLinksTwo.length; k++) {
+                allLinksTwo[k].classList.remove('active');
+            }
+            e.target.classList.add('active');
+        });
 
+    }
 }
-
 
 searchButton.addEventListener('click', (e) => {
     e.preventDefault();
