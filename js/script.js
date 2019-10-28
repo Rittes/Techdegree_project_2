@@ -49,27 +49,42 @@ function searchBar(list) {
     p.style.display = 'none';
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
+    if (searchValue.value.length > 0) {
+        for (let i = 0; i < list.length; i++) {
 
-    for (let i = 0; i < list.length; i++) {
-        list[i].style.display = 'none';
-        if (searchValue.value.length !== 0 && list[i].textContent
-            .toLowerCase().includes(searchValue.value.toLowerCase())) {
-            searchResult.push(list[i]);
-            showPage(searchResult, 1);
-            removePagination();
-            appendPageLinks(searchResult);
+            if (searchValue.value.length !== 0 && list[i].textContent
+                .toLowerCase().includes(searchValue.value.toLowerCase())) {
+                list[i].style.display = '';
+                searchResult.push(list[i]);
+                showPage(searchResult, 1);
+                removePagination();
+                appendPageLinks(searchResult);
+            } else {
+                list[i].style.display = 'none';
+            }
         }
-    }
-    if (searchResult.length < 1) {
-        if (searchValue.value.length !== 0) {
+        if (searchResult.length < 1) {
+            removePagination();
+            appendPageLinks(list);
+            showPage(searchResult);
+
+        }
+        if (searchResult.length === 0) {
             p.style.display = '';
         } else {
             p.style.display = 'none';
         }
+
+    } else {
+        for (let i = 0; i < list.length; i++) {
+            list[i].style.display = '';
+            removePagination();
+            appendPageLinks(list);
+            showPage(list, 1);
+        }
     }
-    if (searchResult.length === 0 && searchValue.value.length === 0) {
-        showPage(list, 1);
-    }
+
+
 
 }
 
