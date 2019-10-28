@@ -67,14 +67,13 @@ function searchBar(list) {
             removePagination();
             appendPageLinks(list);
             showPage(searchResult);
+            if (searchValue.value.length !== 0) {
+                p.style.display = '';
 
+            } else {
+                p.style.display = 'none';
+            }
         }
-        if (searchResult.length === 0) {
-            p.style.display = '';
-        } else {
-            p.style.display = 'none';
-        }
-
     } else {
         for (let i = 0; i < list.length; i++) {
             list[i].style.display = '';
