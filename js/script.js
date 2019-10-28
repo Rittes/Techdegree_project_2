@@ -35,10 +35,6 @@ function appendSearchBar() {
 appendSearchBar();
 
 function removePagination() {
-    //     const pageDiv = document.getElementsByClassName('page')[0];
-    //     const paginationDiv = pageDiv.lastElementChild;
-    //     const paginationUL = paginationDiv.firstElementChild;
-    //     paginationDiv.remove(paginationUL);
     const ul = document.getElementsByTagName('ul')[1];
     const paretnUL = ul.parentNode;
     paretnUL.removeChild(ul);
@@ -59,7 +55,7 @@ function searchBar(list) {
                 list[i].classList.add('student-search');
                 list[i].style.display = 'block';
                 searchResult.push(list[i]);
-                showPage(searchResult, 1);
+                showPage(searchResult);
 
             } else {
                 list[i].style.display = 'none';
