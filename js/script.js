@@ -10,10 +10,9 @@ FSJS project 2 - List Filter and Pagination
 const searchInput = document.createElement('INPUT');
 const searchButton = document.createElement('BUTTON');
 const list = document.querySelectorAll('h3');
-const p = document.createElement('P');
+
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
-
 
 
 
@@ -40,55 +39,42 @@ function removePagination() {
     paretnUL.removeChild(ul);
 
 }
-// const h2 = document.querySelector('h2');
-// p.textContent = 'No results were found...';
-// h2.appendChild(p);
+
 
 function searchBar(list) {
+    const p = document.createElement('P');
+    const h2 = document.querySelector('h2');
+    p.textContent = 'No results were found...';
+    h2.appendChild(p);
+    p.style.display = 'none';
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
-    if (searchValue.length > 0) {
-        for (let i = 0; i < list.length; i++) {
-            list[i].classList.remove('student-search');
-            if (searchValue.value.length !== 0 && list[i].textContent
-                .toLowerCase().includes(searchValue.value.toLowerCase())) {
-                list[i].classList.add('student-search');
-                list[i].style.display = 'block';
-                searchResult.push(list[i]);
-                showPage(searchResult);
-
-            } else {
-                list[i].style.display = 'none';
-            }
-        }
-        if (searchResult.length < 1) {
-            const ul = document.getElementsByTagName('ul')[1];
-            const paretnUL = ul.parentNode;
-            paretnUL.removeChild(ul);
+    for (let i = 0; i < list.length; i++) {
+        // list[i].style.display = 'none';
+        if (searchValue.value.length !== 0 && list[i].textContent
+            .toLowerCase().includes(searchValue.value.toLowerCase())) {
+            searchResult.push(list[i]);
+            showPage(searchResult, 1);
+            removePagination();
             appendPageLinks(searchResult);
-            showPage(searchResult);
-        }
-        if (searchResult.length === 0) {
-            const ul = document.getElementsByTagName('ul')[1];
-            const paretnUL = ul.parentNode;
-            paretnUL.removeChild(ul);
-            const h2 = document.querySelector('h2');
-            p.textContent = 'No results were found...';
-            h2.appendChild(p);
-
-        }
-    } else {
-        for (let i = 0; i < list.length; i++) {
-            list[i].style.display = 'block';
-            const ul = document.getElementsByTagName('ul')[1];
-            const paretnUL = ul.parentNode;
-            paretnUL.removeChild(ul);
-            appendPageLinks(list);
-            showPage(studentList, i);
         }
     }
+    if (searchResult.length < 1) {
+        p.style.display = '';
+        for (let i = 0; i < list.length; i++) {
+            list[i].style.display = 'none';
+        }
+
+    }
+
+    if (searchResult.length === 0) {
+        showPage(list, 1);
+    }
+
+
 
 }
+
 
 
 // This function displays only 10 students per page while hiding the rest.
