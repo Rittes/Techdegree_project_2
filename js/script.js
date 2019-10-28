@@ -37,7 +37,6 @@ function removePagination() {
     const ul = document.getElementsByTagName('ul')[1];
     const paretnUL = ul.parentNode;
     paretnUL.removeChild(ul);
-
 }
 
 
@@ -50,6 +49,7 @@ function searchBar(list) {
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
     if (searchValue.value.length > 0) {
+
         for (let i = 0; i < list.length; i++) {
 
             if (searchValue.value.length !== 0 && list[i].textContent
@@ -59,21 +59,20 @@ function searchBar(list) {
                 showPage(searchResult, 1);
                 removePagination();
                 appendPageLinks(searchResult);
+
             } else {
                 list[i].style.display = 'none';
             }
         }
-        if (searchResult.length < 1) {
-            removePagination();
-            appendPageLinks(list);
-            showPage(searchResult);
-            if (searchValue.value.length !== 0) {
-                p.style.display = '';
+        if (searchResult.length < 1 && searchValue.value.length !== 0) {
+            p.style.display = '';
 
-            } else {
-                p.style.display = 'none';
-            }
+
+        } else {
+            p.style.display = 'none';
+
         }
+
     } else {
         for (let i = 0; i < list.length; i++) {
             list[i].style.display = '';
@@ -82,8 +81,6 @@ function searchBar(list) {
             showPage(list, 1);
         }
     }
-
-
 
 }
 
@@ -124,18 +121,21 @@ function appendPageLinks(list) {
         li.appendChild(a);
         a.textContent = i;
     }
-    const allLinks = document.querySelectorAll('a');
-    allLinks[0].className = 'active';
-    for (let j = 0; j < allLinks.length; j++) {
-        allLinks[j].addEventListener('click', (e) => {
-            let allLinksTwo = document.querySelectorAll('a');
-            showPage(list, event.target.textContent);
-            for (let k = 0; k < allLinksTwo.length; k++) {
-                allLinksTwo[k].classList.remove('active');
-            }
-            e.target.classList.add('active');
-        });
-
+    if (list.length !== 0) {
+        const allLinks = document.querySelectorAll('a');
+        allLinks[0].className = 'active';
+        for (let j = 0; j < allLinks.length; j++) {
+            allLinks[j].addEventListener('click', (e) => {
+                let allLinksTwo = document.querySelectorAll('a');
+                showPage(list, event.target.textContent);
+                for (let k = 0; k < allLinksTwo.length; k++) {
+                    allLinksTwo[k].classList.remove('active');
+                }
+                e.target.classList.add('active');
+            });
+        }
+    } else {
+        removePagination();
     }
 }
 
