@@ -49,8 +49,9 @@ function searchBar(list) {
     p.style.display = 'none';
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
+
     for (let i = 0; i < list.length; i++) {
-        // list[i].style.display = 'none';
+        list[i].style.display = 'none';
         if (searchValue.value.length !== 0 && list[i].textContent
             .toLowerCase().includes(searchValue.value.toLowerCase())) {
             searchResult.push(list[i]);
@@ -60,18 +61,15 @@ function searchBar(list) {
         }
     }
     if (searchResult.length < 1) {
-        p.style.display = '';
-        for (let i = 0; i < list.length; i++) {
-            list[i].style.display = 'none';
+        if (searchValue.value.length !== 0) {
+            p.style.display = '';
+        } else {
+            p.style.display = 'none';
         }
-
     }
-
-    if (searchResult.length === 0) {
+    if (searchResult.length === 0 && searchValue.value.length === 0) {
         showPage(list, 1);
     }
-
-
 
 }
 
@@ -83,7 +81,7 @@ function showPage(list, page) {
     let endIndex = page * itemsPerPage;
     for (let i = 0; i < list.length; i++) {
         if (i >= startIndex && i < endIndex) {
-            list[i].style.display = 'block';
+            list[i].style.display = '';
         } else {
             list[i].style.display = 'none';
         }
