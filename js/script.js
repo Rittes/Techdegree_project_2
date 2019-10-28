@@ -39,7 +39,6 @@ function removePagination() {
     paretnUL.removeChild(ul);
 }
 
-
 function searchBar(list) {
     const p = document.createElement('P');
     const h2 = document.querySelector('h2');
@@ -49,9 +48,7 @@ function searchBar(list) {
     const searchValue = document.querySelector('.student-searchFunction');
     const searchResult = [];
     if (searchValue.value.length > 0) {
-
         for (let i = 0; i < list.length; i++) {
-
             if (searchValue.value.length !== 0 && list[i].textContent
                 .toLowerCase().includes(searchValue.value.toLowerCase())) {
                 list[i].style.display = '';
@@ -59,22 +56,18 @@ function searchBar(list) {
                 showPage(searchResult, 1);
                 removePagination();
                 appendPageLinks(searchResult);
-
             } else {
                 list[i].style.display = 'none';
             }
         }
-        if (searchResult.length < 1 && searchValue.value.length !== 0) {
+        if (searchResult.length < 1 && searchValue.value.length >= 0) {
             p.style.display = '';
-
-
-        } else {
-            p.style.display = 'none';
-
+            appendPageLinks(searchResult);
         }
 
     } else {
         for (let i = 0; i < list.length; i++) {
+
             list[i].style.display = '';
             removePagination();
             appendPageLinks(list);
