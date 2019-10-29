@@ -12,11 +12,13 @@ const searchButton = document.createElement('BUTTON');
 const list = document.querySelectorAll('h3');
 const p = document.createElement('P');
 const h2 = document.querySelector('h2');
+const studentList = document.getElementsByClassName('student-item cf');
+const itemsPerPage = 10;
+
+// Text for the "no restults" message
 h2.appendChild(p);
 p.textContent = 'No results were found...';
 p.style.display = 'none';
-const studentList = document.getElementsByClassName('student-item cf');
-const itemsPerPage = 10;
 
 // This function dynamically adds the search bar to the page.
 
