@@ -10,13 +10,8 @@ FSJS project 2 - List Filter and Pagination
 const searchInput = document.createElement('INPUT');
 const searchButton = document.createElement('BUTTON');
 const list = document.querySelectorAll('h3');
-
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
-
-
-
-
 
 // This function dynamically adds the search bar to the page.
 
@@ -45,12 +40,13 @@ function searchBar(list) {
     p.textContent = 'No results were found...';
     h2.appendChild(p);
     p.style.display = 'none';
-    const searchValue = document.querySelector('.student-searchFunction');
+    const searchValue = searchInput.value.toLowerCase();
     const searchResult = [];
-    if (searchValue.value.length > 0) {
+    if (searchValue.length > 0) {
+        p.style.display = 'none';
         for (let i = 0; i < list.length; i++) {
-            if (searchValue.value.length !== 0 && list[i].textContent
-                .toLowerCase().includes(searchValue.value.toLowerCase())) {
+            if (searchValue.length !== 0 && list[i].textContent
+                .toLowerCase().includes(searchValue.toLowerCase())) {
                 list[i].style.display = '';
                 searchResult.push(list[i]);
                 showPage(searchResult, 1);
@@ -60,21 +56,20 @@ function searchBar(list) {
                 list[i].style.display = 'none';
             }
         }
-        if (searchResult.length < 1 && searchValue.value.length >= 0) {
+        if (searchResult.length === 0 && searchValue.length <= 3) {
             p.style.display = '';
             appendPageLinks(searchResult);
-        }
 
+        }
     } else {
         for (let i = 0; i < list.length; i++) {
-
             list[i].style.display = '';
             removePagination();
             appendPageLinks(list);
             showPage(list, 1);
         }
     }
-
+    showPage(searchResult, 1)
 }
 
 
@@ -137,9 +132,9 @@ searchButton.addEventListener('click', (e) => {
     searchBar(studentList);
 });
 
-
 searchInput.addEventListener('keyup', () => {
     searchBar(studentList);
+
 });
 
 showPage(studentList, 1);
