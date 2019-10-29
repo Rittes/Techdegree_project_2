@@ -10,6 +10,11 @@ FSJS project 2 - List Filter and Pagination
 const searchInput = document.createElement('INPUT');
 const searchButton = document.createElement('BUTTON');
 const list = document.querySelectorAll('h3');
+const p = document.createElement('P');
+const h2 = document.querySelector('h2');
+h2.appendChild(p);
+p.textContent = 'No results were found...';
+p.style.display = 'none';
 const studentList = document.getElementsByClassName('student-item cf');
 const itemsPerPage = 10;
 
@@ -28,18 +33,12 @@ function appendSearchBar() {
 }
 appendSearchBar();
 
-function removePagination() {
-    const ul = document.getElementsByTagName('ul')[1];
-    const paretnUL = ul.parentNode;
-    paretnUL.removeChild(ul);
-}
+
+// This function recieves an input, checks and returns a match from the list,
+// number of pages updates accordingly.
+// if no results a "no results" message will appear.
 
 function searchBar(list) {
-    const p = document.createElement('P');
-    const h2 = document.querySelector('h2');
-    p.textContent = 'No results were found...';
-    h2.appendChild(p);
-    p.style.display = 'none';
     const searchValue = searchInput.value.toLowerCase();
     const searchResult = [];
     if (searchValue.length > 0) {
@@ -56,10 +55,9 @@ function searchBar(list) {
                 list[i].style.display = 'none';
             }
         }
-        if (searchResult.length === 0 && searchValue.length <= 3) {
+        if (searchResult.length === 0) {
             p.style.display = '';
             appendPageLinks(searchResult);
-
         }
     } else {
         for (let i = 0; i < list.length; i++) {
@@ -69,7 +67,6 @@ function searchBar(list) {
             showPage(list, 1);
         }
     }
-    showPage(searchResult, 1)
 }
 
 
@@ -89,14 +86,14 @@ function showPage(list, page) {
 
 
 // This function creates 'div' 'ul' 'li' 'a' elements and append them to the page.
-// It loops over the list to create numbered links .
+// It loops over the list to create numbered links.
+// every link holds a list of 10 students.
 
 
 function appendPageLinks(list) {
     const divParent = document.querySelector('.page');
     const div = document.createElement('DIV');
     const ul = document.createElement('UL');
-    ul.className = 'pagination__ul';
     div.className = 'pagination';
     divParent.appendChild(div);
     div.appendChild(ul);
@@ -127,6 +124,14 @@ function appendPageLinks(list) {
     }
 }
 
+// Removes the pagination links from the page
+function removePagination() {
+    const ul = document.getElementsByTagName('ul')[1];
+    const paretnUL = ul.parentNode;
+    paretnUL.removeChild(ul);
+}
+
+// Event handlers for the search button and the text input
 searchButton.addEventListener('click', (e) => {
     e.preventDefault();
     searchBar(studentList);
